@@ -12,4 +12,20 @@ Package goexec is a fluent decorator based API for os/exec.
 `go get -u github.com/brad-jones/goexec`
 
 ```go
+package main
+
+import (
+	"github.com/brad-jones/goasync/await"
+	"github.com/brad-jones/goexec"
+)
+
+func main() {
+	done1, err1 := goexec.RunAsync("ping", "-c", "4", "8.8.8.8")
+	done2, err2 := goexec.RunAsync("ping", "-c", "4", "8.8.4.4")
+	select {
+	case <-await.AllAsync(done1, done2):
+	case e := <-await.AnyErrorAsync(err1, err2):
+		panic(e)
+	}
+}
 ```
