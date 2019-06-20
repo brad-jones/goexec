@@ -21,8 +21,8 @@ func init() {
 }
 
 var prefixToColorMap = &sync.Map{}
-var choosenColors = &sync.Map{}
-var choosenCount = 0
+var chosenColors = &sync.Map{}
+var chosenCount = 0
 var availableColors = []color.Attribute{
 	color.FgRed,
 	color.FgGreen,
@@ -63,20 +63,20 @@ func colorChooser(prefix string) color.Attribute {
 
 	// Check if we reached the maximum number of available colors.
 	// If so we will just have to reuse a color.
-	if choosenCount == len(availableColors) {
+	if chosenCount == len(availableColors) {
 		prefixToColorMap.Store(prefix, c)
 		return c.(color.Attribute)
 	}
 
-	// Check if this color has already been choosen,
+	// Check if this color has already been chosen,
 	// running ourselves again to select hopefully a different color.
-	if _, choosen := choosenColors.Load(c); choosen == true {
+	if _, chosen := chosenColors.Load(c); chosen == true {
 		return colorChooser(prefix)
 	}
 
 	// Cache the result for next time
-	choosenCount = choosenCount + 1
-	choosenColors.Store(c, true)
+	chosenCount = chosenCount + 1
+	chosenColors.Store(c, true)
 	prefixToColorMap.Store(prefix, c)
 
 	return c.(color.Attribute)
