@@ -12,7 +12,7 @@ import (
 //
 // 	Cmd("ping", Args("-c", "4", "1.1.1.1"))
 func Cmd(cmd string, decorators ...func(*exec.Cmd) error) (c *exec.Cmd, err error) {
-	defer goerr.Handle(func(e error){
+	defer goerr.Handle(func(e error) {
 		c = nil
 		err = errors.Wrap(e, 0)
 	})
@@ -41,13 +41,13 @@ func Cmd(cmd string, decorators ...func(*exec.Cmd) error) (c *exec.Cmd, err erro
 // You might write:
 // 	Run("ping", "-c", "4", "8.8.8.8")
 func Run(cmd string, args ...string) (err error) {
-	defer goerr.Handle(func(e error){
+	defer goerr.Handle(func(e error) {
 		err = errors.Wrap(e, 0)
 	})
 
 	c, err := Cmd(cmd, Args(args...))
 	goerr.Check(err)
-	
+
 	goerr.Check(c.Run())
 	return
 }
@@ -61,7 +61,7 @@ func MustRun(cmd string, args ...string) {
 func RunAsync(cmd string, args ...string) (done <-chan struct{}, err <-chan error) {
 	doneCh := make(chan struct{}, 1)
 	errCh := make(chan error, 1)
-	go func(){
+	go func() {
 		err := Run(cmd, args...)
 		if err == nil {
 			close(doneCh)
@@ -80,7 +80,7 @@ func RunAsync(cmd string, args ...string) (done <-chan struct{}, err <-chan erro
 // You might write:
 // 	stdOut, stdErr, err := RunBuffered("ping", "-c", "4", "8.8.8.8")
 func RunBuffered(cmd string, args ...string) (stdOutBuf, stdErrBuf string, err error) {
-	defer goerr.Handle(func(e error){
+	defer goerr.Handle(func(e error) {
 		stdOutBuf = ""
 		stdErrBuf = ""
 		err = errors.Wrap(e, 0)
@@ -93,7 +93,7 @@ func RunBuffered(cmd string, args ...string) (stdOutBuf, stdErrBuf string, err e
 	if err != nil {
 		err = errors.Wrap(e, 0)
 	}
-	
+
 	return string(o), string(e), err
 }
 
@@ -109,7 +109,7 @@ func RunBufferedAsync(cmd string, args ...string) (stdOutBuf, stdErrBuf <-chan s
 	stdOutCh := make(chan string, 1)
 	stdErrCh := make(chan string, 1)
 	errCh := make(chan error, 1)
-	go func(){
+	go func() {
 		stdOut, stdErr, err := RunBuffered(cmd, args...)
 		stdOutCh <- stdOut
 		stdErrCh <- stdErr
@@ -128,7 +128,7 @@ func RunBufferedAsync(cmd string, args ...string) (stdOutBuf, stdErrBuf <-chan s
 // You might write:
 // 	RunPrefixed("foo", "ping", "-c", "4", "8.8.8.8")
 func RunPrefixed(prefix, cmd string, args ...string) (err error) {
-	defer goerr.Handle(func(e error){
+	defer goerr.Handle(func(e error) {
 		err = errors.Wrap(e, 0)
 	})
 
@@ -136,7 +136,7 @@ func RunPrefixed(prefix, cmd string, args ...string) (err error) {
 	goerr.Check(err)
 
 	goerr.Check(RunPrefixedCmd(prefix, c))
-	return 
+	return
 }
 
 // MustRunPrefixed does the same as RunPrefixed but panics if an error is encountered.
@@ -148,7 +148,7 @@ func MustRunPrefixed(prefix, cmd string, args ...string) {
 func RunPrefixedAsync(prefix, cmd string, args ...string) (done <-chan struct{}, err <-chan error) {
 	doneCh := make(chan struct{}, 1)
 	errCh := make(chan error, 1)
-	go func(){
+	go func() {
 		err := RunPrefixed(prefix, cmd, args...)
 		if err == nil {
 			close(doneCh)
@@ -163,7 +163,7 @@ func RunPrefixedAsync(prefix, cmd string, args ...string) (done <-chan struct{},
 // This is useful when running many commands concurrently,
 // output will look similar to docker-compose.
 func RunPrefixedCmd(prefix string, cmd *exec.Cmd) (err error) {
-	defer goerr.Handle(func(e error){
+	defer goerr.Handle(func(e error) {
 		err = errors.Wrap(e, 0)
 	})
 
@@ -193,7 +193,7 @@ func MustRunPrefixedCmd(prefix string, cmd *exec.Cmd) {
 func RunPrefixedCmdAsync(prefix string, cmd *exec.Cmd) (done <-chan struct{}, err <-chan error) {
 	doneCh := make(chan struct{}, 1)
 	errCh := make(chan error, 1)
-	go func(){
+	go func() {
 		err := RunPrefixedCmd(prefix, cmd)
 		if err == nil {
 			close(doneCh)
@@ -207,7 +207,7 @@ func RunPrefixedCmdAsync(prefix string, cmd *exec.Cmd) (done <-chan struct{}, er
 // RunBufferedCmd will buffer all StdOut and StdErr, returning the buffers.
 // This is useful when you wish to parse the results of a command.
 func RunBufferedCmd(cmd *exec.Cmd) (stdOut, stdErr []byte, err error) {
-	defer goerr.Handle(func(e error){
+	defer goerr.Handle(func(e error) {
 		stdOut = nil
 		stdErr = nil
 		err = errors.Wrap(e, 0)
@@ -220,7 +220,7 @@ func RunBufferedCmd(cmd *exec.Cmd) (stdOut, stdErr []byte, err error) {
 	stdErrPipeR, stdErrPipeW, err := os.Pipe()
 	goerr.Check(err)
 	cmd.Stderr = stdErrPipeW
-	
+
 	return buffered(
 		os.Stdout, os.Stderr,
 		stdOutPipeR, stdErrPipeR,
@@ -242,7 +242,7 @@ func RunBufferedCmdAsync(cmd *exec.Cmd) (stdOut, stdErr <-chan []byte, err <-cha
 	stdOutCh := make(chan []byte, 1)
 	stdErrCh := make(chan []byte, 1)
 	errCh := make(chan error, 1)
-	go func(){
+	go func() {
 		stdOut, stdErr, err := RunBufferedCmd(cmd)
 		stdOutCh <- stdOut
 		stdErrCh <- stdErr
@@ -256,7 +256,7 @@ func RunBufferedCmdAsync(cmd *exec.Cmd) (stdOut, stdErr <-chan []byte, err <-cha
 // Pipe will send the output of the first command
 // to the input of the second and so on.
 func Pipe(cmds ...*exec.Cmd) (err error) {
-	defer goerr.Handle(func(e error){
+	defer goerr.Handle(func(e error) {
 		err = errors.Wrap(e, 0)
 	})
 
@@ -289,7 +289,7 @@ func MustPipe(cmds ...*exec.Cmd) {
 func PipeAsync(cmds ...*exec.Cmd) (done <-chan struct{}, err <-chan error) {
 	doneCh := make(chan struct{}, 1)
 	errCh := make(chan error, 1)
-	go func(){
+	go func() {
 		err := Pipe(cmds...)
 		if err == nil {
 			close(doneCh)
@@ -304,7 +304,7 @@ func PipeAsync(cmds ...*exec.Cmd) (done <-chan struct{}, err <-chan error) {
 // This is useful when running many pipes concurrently,
 // output will look similar to docker-compose.
 func PipePrefixed(prefix string, cmds ...*exec.Cmd) (err error) {
-	defer goerr.Handle(func(e error){
+	defer goerr.Handle(func(e error) {
 		err = errors.Wrap(e, 0)
 	})
 
@@ -338,7 +338,7 @@ func MustPipePrefixed(prefix string, cmds ...*exec.Cmd) {
 func PipePrefixedAsync(prefix string, cmds ...*exec.Cmd) (done <-chan struct{}, err <-chan error) {
 	doneCh := make(chan struct{}, 1)
 	errCh := make(chan error, 1)
-	go func(){
+	go func() {
 		err := PipePrefixed(prefix, cmds...)
 		if err == nil {
 			close(doneCh)
@@ -352,7 +352,7 @@ func PipePrefixedAsync(prefix string, cmds ...*exec.Cmd) (done <-chan struct{}, 
 // PipeBuffered will buffer all StdOut and StdErr, returning the buffers.
 // This is useful when you wish to parse the results of a pipe.
 func PipeBuffered(cmds ...*exec.Cmd) (stdOut, stdErr []byte, err error) {
-	defer goerr.Handle(func(e error){
+	defer goerr.Handle(func(e error) {
 		stdOut = nil
 		stdErr = nil
 		err = errors.Wrap(e, 0)
@@ -391,7 +391,7 @@ func PipeBufferedAsync(cmds ...*exec.Cmd) (stdOut, stdErr <-chan []byte, err <-c
 	stdOutCh := make(chan []byte, 1)
 	stdErrCh := make(chan []byte, 1)
 	errCh := make(chan error, 1)
-	go func(){
+	go func() {
 		stdOut, stdErr, err := PipeBuffered(cmds...)
 		stdOutCh <- stdOut
 		stdErrCh <- stdErr
