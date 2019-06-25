@@ -133,7 +133,7 @@ func prefixed(prefix string,
 func buffered(fstdOut, stdErr io.Writer,
 	stdOutPipeR, stdErrPipeR io.Reader,
 	stdOutPipeW, stdErrPipeW io.WriteCloser,
-	fn func() error) (stdOutBuf, stdErrBuf []byte, err error) {
+	fn func() error) (out *StdBytes, err error) {
 
 	errorCh := make(chan error)
 
@@ -168,8 +168,8 @@ func buffered(fstdOut, stdErr io.Writer,
 
 	// Catch any errors
 	if err := <-errorCh; err != nil {
-		return <-stdOutC, <-stdErrC, err
+		return &StdBytes{<-stdOutC, <-stdErrC}, err
 	}
 
-	return <-stdOutC, <-stdErrC, nil
+	return &StdBytes{<-stdOutC, <-stdErrC}, nil
 }

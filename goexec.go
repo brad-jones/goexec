@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/brad-jones/goasync/task"
 	"github.com/brad-jones/goerr"
 	"github.com/go-errors/errors"
 )
@@ -58,18 +59,10 @@ func MustRun(cmd string, args ...string) {
 }
 
 // RunAsync does the same as Run but does so asynchronously.
-func RunAsync(cmd string, args ...string) (done <-chan struct{}, err <-chan error) {
-	doneCh := make(chan struct{}, 1)
-	errCh := make(chan error, 1)
-	go func() {
-		err := Run(cmd, args...)
-		if err == nil {
-			close(doneCh)
-		} else {
-			errCh <- errors.Wrap(err, 0)
-		}
-	}()
-	return doneCh, errCh
+func RunAsync(cmd string, args ...string) *task.Task {
+	return task.New(func(t *task.Internal) {
+		MustRun(cmd, args...)
+	})
 }
 
 // RunBuffered is a convenience function for simple cases.
@@ -78,46 +71,37 @@ func RunAsync(cmd string, args ...string) (done <-chan struct{}, err <-chan erro
 // 	RunBufferedCmd(Cmd("ping", Args("-c", "4", "8.8.8.8")))
 //
 // You might write:
-// 	stdOut, stdErr, err := RunBuffered("ping", "-c", "4", "8.8.8.8")
-func RunBuffered(cmd string, args ...string) (stdOutBuf, stdErrBuf string, err error) {
+// 	RunBuffered("ping", "-c", "4", "8.8.8.8")
+//
+// NOTE: `RunBuffered()` returns stdOut and stdErr as strings if you want the
+// untouched byte arrays you could use `RunBufferedCmd()` instead.
+func RunBuffered(cmd string, args ...string) (out *StdStrings, err error) {
 	defer goerr.Handle(func(e error) {
-		stdOutBuf = ""
-		stdErrBuf = ""
+		out = nil
 		err = errors.Wrap(e, 0)
 	})
 
 	c, err := Cmd(cmd, Args(args...))
 	goerr.Check(err)
 
-	o, e, err := RunBufferedCmd(c)
-	if err != nil {
-		err = errors.Wrap(e, 0)
-	}
+	o, err := RunBufferedCmd(c)
+	goerr.Check(err)
 
-	return string(o), string(e), err
+	return &StdStrings{string(o.StdOut), string(o.StdErr)}, err
 }
 
 // MustRunBuffered does the same as RunBuffered but panics if an error is encountered.
-func MustRunBuffered(cmd string, args ...string) (stdOutBuf, stdErrBuf string) {
-	stdOutBuf, stdOutErr, err := RunBuffered(cmd, args...)
+func MustRunBuffered(cmd string, args ...string) *StdStrings {
+	out, err := RunBuffered(cmd, args...)
 	goerr.Check(err)
-	return stdOutBuf, stdOutErr
+	return out
 }
 
 // RunBufferedAsync does the same as RunBuffered but does so asynchronously.
-func RunBufferedAsync(cmd string, args ...string) (stdOutBuf, stdErrBuf <-chan string, err <-chan error) {
-	stdOutCh := make(chan string, 1)
-	stdErrCh := make(chan string, 1)
-	errCh := make(chan error, 1)
-	go func() {
-		stdOut, stdErr, err := RunBuffered(cmd, args...)
-		stdOutCh <- stdOut
-		stdErrCh <- stdErr
-		if err != nil {
-			errCh <- errors.Wrap(err, 0)
-		}
-	}()
-	return stdOutCh, stdErrCh, errCh
+func RunBufferedAsync(cmd string, args ...string) *task.Task {
+	return task.New(func(t *task.Internal) {
+		t.Resolve(MustRunBuffered(cmd, args...))
+	})
 }
 
 // RunPrefixed is a convenience function for simple cases.
@@ -145,18 +129,10 @@ func MustRunPrefixed(prefix, cmd string, args ...string) {
 }
 
 // RunPrefixedAsync does the same as RunPrefixed but does so asynchronously.
-func RunPrefixedAsync(prefix, cmd string, args ...string) (done <-chan struct{}, err <-chan error) {
-	doneCh := make(chan struct{}, 1)
-	errCh := make(chan error, 1)
-	go func() {
-		err := RunPrefixed(prefix, cmd, args...)
-		if err == nil {
-			close(doneCh)
-		} else {
-			errCh <- errors.Wrap(err, 0)
-		}
-	}()
-	return doneCh, errCh
+func RunPrefixedAsync(prefix, cmd string, args ...string) *task.Task {
+	return task.New(func(t *task.Internal) {
+		MustRunPrefixed(prefix, cmd, args...)
+	})
 }
 
 // RunPrefixedCmd will prefix all StdOut and StdErr with given prefix.
@@ -190,26 +166,17 @@ func MustRunPrefixedCmd(prefix string, cmd *exec.Cmd) {
 }
 
 // RunPrefixedCmdAsync does the same as RunPrefixedCmd but does so asynchronously.
-func RunPrefixedCmdAsync(prefix string, cmd *exec.Cmd) (done <-chan struct{}, err <-chan error) {
-	doneCh := make(chan struct{}, 1)
-	errCh := make(chan error, 1)
-	go func() {
-		err := RunPrefixedCmd(prefix, cmd)
-		if err == nil {
-			close(doneCh)
-		} else {
-			errCh <- errors.Wrap(err, 0)
-		}
-	}()
-	return doneCh, errCh
+func RunPrefixedCmdAsync(prefix string, cmd *exec.Cmd) *task.Task {
+	return task.New(func(t *task.Internal) {
+		RunPrefixedCmd(prefix, cmd)
+	})
 }
 
 // RunBufferedCmd will buffer all StdOut and StdErr, returning the buffers.
 // This is useful when you wish to parse the results of a command.
-func RunBufferedCmd(cmd *exec.Cmd) (stdOut, stdErr []byte, err error) {
+func RunBufferedCmd(cmd *exec.Cmd) (out *StdBytes, err error) {
 	defer goerr.Handle(func(e error) {
-		stdOut = nil
-		stdErr = nil
+		out = nil
 		err = errors.Wrap(e, 0)
 	})
 
@@ -231,26 +198,17 @@ func RunBufferedCmd(cmd *exec.Cmd) (stdOut, stdErr []byte, err error) {
 }
 
 // MustRunBufferedCmd does the same as RunBufferedCmd but panics if an error is encountered.
-func MustRunBufferedCmd(cmd *exec.Cmd) (stdOut, stdErr []byte) {
-	stdOut, stdErr, err := RunBufferedCmd(cmd)
+func MustRunBufferedCmd(cmd *exec.Cmd) *StdBytes {
+	out, err := RunBufferedCmd(cmd)
 	goerr.Check(err)
-	return stdOut, stdErr
+	return out
 }
 
 // RunBufferedCmdAsync does the same as RunBufferedCmd but does so asynchronously.
-func RunBufferedCmdAsync(cmd *exec.Cmd) (stdOut, stdErr <-chan []byte, err <-chan error) {
-	stdOutCh := make(chan []byte, 1)
-	stdErrCh := make(chan []byte, 1)
-	errCh := make(chan error, 1)
-	go func() {
-		stdOut, stdErr, err := RunBufferedCmd(cmd)
-		stdOutCh <- stdOut
-		stdErrCh <- stdErr
-		if err != nil {
-			errCh <- errors.Wrap(err, 0)
-		}
-	}()
-	return stdOutCh, stdErrCh, errCh
+func RunBufferedCmdAsync(cmd *exec.Cmd) *task.Task {
+	return task.New(func(t *task.Internal) {
+		t.Resolve(MustRunBufferedCmd(cmd))
+	})
 }
 
 // Pipe will send the output of the first command
@@ -286,18 +244,10 @@ func MustPipe(cmds ...*exec.Cmd) {
 }
 
 // PipeAsync does the same as Pipe but does so asynchronously.
-func PipeAsync(cmds ...*exec.Cmd) (done <-chan struct{}, err <-chan error) {
-	doneCh := make(chan struct{}, 1)
-	errCh := make(chan error, 1)
-	go func() {
-		err := Pipe(cmds...)
-		if err == nil {
-			close(doneCh)
-		} else {
-			errCh <- errors.Wrap(err, 0)
-		}
-	}()
-	return doneCh, errCh
+func PipeAsync(cmds ...*exec.Cmd) *task.Task {
+	return task.New(func(t *task.Internal) {
+		MustPipe(cmds...)
+	})
 }
 
 // PipePrefixed will prefix all StdOut and StdErr with given prefix.
@@ -335,26 +285,17 @@ func MustPipePrefixed(prefix string, cmds ...*exec.Cmd) {
 }
 
 // PipePrefixedAsync does the same as PipePrefixed but does so asynchronously.
-func PipePrefixedAsync(prefix string, cmds ...*exec.Cmd) (done <-chan struct{}, err <-chan error) {
-	doneCh := make(chan struct{}, 1)
-	errCh := make(chan error, 1)
-	go func() {
-		err := PipePrefixed(prefix, cmds...)
-		if err == nil {
-			close(doneCh)
-		} else {
-			errCh <- errors.Wrap(err, 0)
-		}
-	}()
-	return doneCh, errCh
+func PipePrefixedAsync(prefix string, cmds ...*exec.Cmd) *task.Task {
+	return task.New(func(t *task.Internal) {
+		MustPipePrefixed(prefix, cmds...)
+	})
 }
 
 // PipeBuffered will buffer all StdOut and StdErr, returning the buffers.
 // This is useful when you wish to parse the results of a pipe.
-func PipeBuffered(cmds ...*exec.Cmd) (stdOut, stdErr []byte, err error) {
+func PipeBuffered(cmds ...*exec.Cmd) (out *StdBytes, err error) {
 	defer goerr.Handle(func(e error) {
-		stdOut = nil
-		stdErr = nil
+		out = nil
 		err = errors.Wrap(e, 0)
 	})
 
@@ -380,24 +321,15 @@ func PipeBuffered(cmds ...*exec.Cmd) (stdOut, stdErr []byte, err error) {
 }
 
 // MustPipeBuffered does the same as PipeBuffered but panics if an error is encountered.
-func MustPipeBuffered(cmds ...*exec.Cmd) (stdOut, stdErr []byte) {
-	stdOut, stdErr, err := PipeBuffered(cmds...)
+func MustPipeBuffered(cmds ...*exec.Cmd) *StdBytes {
+	out, err := PipeBuffered(cmds...)
 	goerr.Check(err)
-	return stdOut, stdErr
+	return out
 }
 
 // PipeBufferedAsync does the same as PipeBuffered but does so asynchronously.
-func PipeBufferedAsync(cmds ...*exec.Cmd) (stdOut, stdErr <-chan []byte, err <-chan error) {
-	stdOutCh := make(chan []byte, 1)
-	stdErrCh := make(chan []byte, 1)
-	errCh := make(chan error, 1)
-	go func() {
-		stdOut, stdErr, err := PipeBuffered(cmds...)
-		stdOutCh <- stdOut
-		stdErrCh <- stdErr
-		if err != nil {
-			errCh <- errors.Wrap(err, 0)
-		}
-	}()
-	return stdOutCh, stdErrCh, errCh
+func PipeBufferedAsync(cmds ...*exec.Cmd) *task.Task {
+	return task.New(func(t *task.Internal) {
+		MustPipeBuffered(cmds...)
+	})
 }
