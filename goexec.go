@@ -34,6 +34,13 @@ func Cmd(cmd string, decorators ...func(*exec.Cmd) error) (c *exec.Cmd, err erro
 	return
 }
 
+// MustCmd does the same as Cmd but panics if an error is encountered.
+func MustCmd(cmd string, decorators ...func(*exec.Cmd) error) *exec.Cmd {
+	c, e := Cmd(cmd, decorators...)
+	goerr.Check(e)
+	return c
+}
+
 // Run is a convenience function for simple cases.
 //
 // Instead of:
