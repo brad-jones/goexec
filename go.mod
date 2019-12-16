@@ -1,11 +1,11 @@
 module github.com/brad-jones/goexec
 
-go 1.12
+go 1.13
 
 require (
-	github.com/brad-jones/goasync v0.0.0-20190625061023-a7ebecf93b33
-	github.com/brad-jones/goerr v0.0.0-20190620043302-e702e0f33115
-	github.com/fatih/color v1.7.0
+	github.com/brad-jones/goasync v0.0.0-20191212053359-400524d7da3a
+	github.com/brad-jones/goerr v0.0.0-20191212045712-8f2b09c286c0
+	github.com/brad-jones/goprefix v0.0.0-20191216020558-60bdb43f9d04
 	github.com/go-errors/errors v1.0.1
-	github.com/mattn/go-colorable v0.1.2 // indirect
+	golang.org/x/sys v0.0.0-20191210023423-ac6580df4449 // indirect
 )
