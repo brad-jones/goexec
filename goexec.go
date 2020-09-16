@@ -4,19 +4,15 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/brad-jones/goasync/task"
-	"github.com/brad-jones/goerr"
-	"github.com/go-errors/errors"
+	"github.com/brad-jones/goasync/v2/task"
+	"github.com/brad-jones/goerr/v2"
 )
 
 // Cmd provides a fluent, decorator based API for os/exec.
 //
 // 	Cmd("ping", Args("-c", "4", "1.1.1.1"))
 func Cmd(cmd string, decorators ...func(*exec.Cmd) error) (c *exec.Cmd, err error) {
-	defer goerr.Handle(func(e error) {
-		c = nil
-		err = errors.Wrap(e, 0)
-	})
+	defer goerr.Handle(func(e error) { c = nil; err = e })
 
 	c = exec.Command(cmd)
 	c.Stdin = os.Stdin
@@ -49,9 +45,7 @@ func MustCmd(cmd string, decorators ...func(*exec.Cmd) error) *exec.Cmd {
 // You might write:
 // 	Run("ping", "-c", "4", "8.8.8.8")
 func Run(cmd string, args ...string) (err error) {
-	defer goerr.Handle(func(e error) {
-		err = errors.Wrap(e, 0)
-	})
+	defer goerr.Handle(func(e error) { err = e })
 
 	c, err := Cmd(cmd, Args(args...))
 	goerr.Check(err)
@@ -83,10 +77,7 @@ func RunAsync(cmd string, args ...string) *task.Task {
 // NOTE: `RunBuffered()` returns stdOut and stdErr as strings if you want the
 // untouched byte arrays you could use `RunBufferedCmd()` instead.
 func RunBuffered(cmd string, args ...string) (out *StdStrings, err error) {
-	defer goerr.Handle(func(e error) {
-		out = nil
-		err = errors.Wrap(e, 0)
-	})
+	defer goerr.Handle(func(e error) { out = nil; err = e })
 
 	c, err := Cmd(cmd, Args(args...))
 	goerr.Check(err)
@@ -119,9 +110,7 @@ func RunBufferedAsync(cmd string, args ...string) *task.Task {
 // You might write:
 // 	RunPrefixed("foo", "ping", "-c", "4", "8.8.8.8")
 func RunPrefixed(prefix, cmd string, args ...string) (err error) {
-	defer goerr.Handle(func(e error) {
-		err = errors.Wrap(e, 0)
-	})
+	defer goerr.Handle(func(e error) { err = e })
 
 	c, err := Cmd(cmd, Args(args...))
 	goerr.Check(err)
@@ -146,9 +135,7 @@ func RunPrefixedAsync(prefix, cmd string, args ...string) *task.Task {
 // This is useful when running many commands concurrently,
 // output will look similar to docker-compose.
 func RunPrefixedCmd(prefix string, cmd *exec.Cmd) (err error) {
-	defer goerr.Handle(func(e error) {
-		err = errors.Wrap(e, 0)
-	})
+	defer goerr.Handle(func(e error) { err = e })
 
 	stdOutPipeR, stdOutPipeW, err := os.Pipe()
 	goerr.Check(err)
@@ -182,10 +169,7 @@ func RunPrefixedCmdAsync(prefix string, cmd *exec.Cmd) *task.Task {
 // RunBufferedCmd will buffer all StdOut and StdErr, returning the buffers.
 // This is useful when you wish to parse the results of a command.
 func RunBufferedCmd(cmd *exec.Cmd) (out *StdBytes, err error) {
-	defer goerr.Handle(func(e error) {
-		out = nil
-		err = errors.Wrap(e, 0)
-	})
+	defer goerr.Handle(func(e error) { out = nil; err = e })
 
 	stdOutPipeR, stdOutPipeW, err := os.Pipe()
 	goerr.Check(err)
@@ -221,9 +205,7 @@ func RunBufferedCmdAsync(cmd *exec.Cmd) *task.Task {
 // Pipe will send the output of the first command
 // to the input of the second and so on.
 func Pipe(cmds ...*exec.Cmd) (err error) {
-	defer goerr.Handle(func(e error) {
-		err = errors.Wrap(e, 0)
-	})
+	defer goerr.Handle(func(e error) { err = e })
 
 	for key, cmd := range cmds {
 		if key > 0 {
@@ -261,9 +243,7 @@ func PipeAsync(cmds ...*exec.Cmd) *task.Task {
 // This is useful when running many pipes concurrently,
 // output will look similar to docker-compose.
 func PipePrefixed(prefix string, cmds ...*exec.Cmd) (err error) {
-	defer goerr.Handle(func(e error) {
-		err = errors.Wrap(e, 0)
-	})
+	defer goerr.Handle(func(e error) { err = e })
 
 	stdOutPipeR, stdOutPipeW, err := os.Pipe()
 	goerr.Check(err)
@@ -301,10 +281,7 @@ func PipePrefixedAsync(prefix string, cmds ...*exec.Cmd) *task.Task {
 // PipeBuffered will buffer all StdOut and StdErr, returning the buffers.
 // This is useful when you wish to parse the results of a pipe.
 func PipeBuffered(cmds ...*exec.Cmd) (out *StdBytes, err error) {
-	defer goerr.Handle(func(e error) {
-		out = nil
-		err = errors.Wrap(e, 0)
-	})
+	defer goerr.Handle(func(e error) { out = nil; err = e })
 
 	stdOutPipeR, stdOutPipeW, err := os.Pipe()
 	goerr.Check(err)

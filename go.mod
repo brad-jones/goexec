@@ -1,11 +1,11 @@
-module github.com/brad-jones/goexec
+module github.com/brad-jones/goexec/v2
 
-go 1.13
+go 1.15
 
 require (
-	github.com/brad-jones/goasync v0.0.0-20191212053359-400524d7da3a
-	github.com/brad-jones/goerr v0.0.0-20191212045712-8f2b09c286c0
-	github.com/brad-jones/goprefix v0.0.0-20191216020558-60bdb43f9d04
-	github.com/go-errors/errors v1.0.1
-	golang.org/x/sys v0.0.0-20191210023423-ac6580df4449 // indirect
+	github.com/brad-jones/goasync/v2 v2.0.0
+	github.com/brad-jones/goerr/v2 v2.1.0
+	github.com/brad-jones/goprefix v1.0.0
+	github.com/stretchr/testify v1.6.1
+	github.com/wesovilabs/koazee v0.0.5
 )
