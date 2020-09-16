@@ -2,7 +2,7 @@
 
 This example shows how to execute a child process and prefix each line of output
 with a string of your choosing. The string will be colored randomly using logic
-defined by <https://github.com/brad-jones/goprefix>. This is especially useful
+defined by <https://github.com/brad-jones/goprefix/v2>. This is especially useful
 for running many child processes concurrently and creating output similar to
 tools like `docker-compose`.
 

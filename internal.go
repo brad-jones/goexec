@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/brad-jones/goprefix/pkg/colorchooser"
-	"github.com/brad-jones/goprefix/pkg/prefixer"
+	"github.com/brad-jones/goprefix/v2/pkg/colorchooser"
+	"github.com/brad-jones/goprefix/v2/pkg/prefixer"
 )
 
 func prefixed(prefix string,
