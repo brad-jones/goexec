@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/brad-jones/goexec/compare/v2.1.3...v2.1.4) (2021-03-11)
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/brad-jones/goasync/v2 from 2.1.1 to 2.1.2 ([#50](https://github.com/brad-jones/goexec/issues/50)) ([2c0e5e8](https://github.com/brad-jones/goexec/commit/2c0e5e8c6bbd246587b784cf2326ce304ff2d8ba))
+
 ## [2.1.3](https://github.com/brad-jones/goexec/compare/v2.1.2...v2.1.3) (2021-03-11)
 
 
