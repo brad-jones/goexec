@@ -1,3 +1,11 @@
+## [2.1.3](https://github.com/brad-jones/goexec/compare/v2.1.2...v2.1.3) (2021-03-11)
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/brad-jones/goerr/v2 from 2.1.1 to 2.1.3 ([#49](https://github.com/brad-jones/goexec/issues/49)) ([b22cae1](https://github.com/brad-jones/goexec/commit/b22cae113046d4f796bb67da6d7af20080308d0c))
+* **deps:** bump github.com/stretchr/testify from 1.6.1 to 1.7.0 ([#26](https://github.com/brad-jones/goexec/issues/26)) ([afd227b](https://github.com/brad-jones/goexec/commit/afd227bfaeca0e407a0665e72f17073b9be2af62))
+
 ## [2.1.2](https://github.com/brad-jones/goexec/compare/v2.1.1...v2.1.2) (2020-09-23)
 
 
