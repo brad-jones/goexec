@@ -1,5 +1,5 @@
-github.com/brad-jones/goasync/v2 v2.1.1 h1:0LuWfJWtgkqEdMLQVJmDMX78fx2o0BcecrQTpr+P2F4=
-github.com/brad-jones/goasync/v2 v2.1.1/go.mod h1:Q6AiIqVl/tTEMcVBQFQx3w2W4pu9zIIkgrYTWvzhU1Q=
+github.com/brad-jones/goasync/v2 v2.1.2 h1:X4HQtYmdv6zUEVBvT+rT88j0z5jKbvhrLYZIa0pJ4qs=
+github.com/brad-jones/goasync/v2 v2.1.2/go.mod h1:IpxsCArvwhTrAvqtI/l62exEiy1qEGSRRFjr7acCRLE=
 github.com/brad-jones/goerr/v2 v2.1.1/go.mod h1:Tj0XvHoA0mA1ydoXzedjw7tNVcTWRAgTLG5t18UM4cE=
 github.com/brad-jones/goerr/v2 v2.1.3 h1:lZmGtX3V4FZzjjtE/VYrdkbuZSSNi+U+DghS6MZbpA4=
 github.com/brad-jones/goerr/v2 v2.1.3/go.mod h1:jgrXwBUs8JC5im8qIxaKsr/NYV/nrG7P4k9zL/ZQgl4=
