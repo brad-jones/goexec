@@ -1,13 +1,7 @@
-github.com/brad-jones/goasync/v2 v2.0.0 h1:qfQMNR/Ht9BiXt7rwdYcnrMaAs57nbK0kmVevoTXvbg=
-github.com/brad-jones/goasync/v2 v2.0.0/go.mod h1:QQWfLFvw9Q57A7Xruq56osllX1bJCeDg+BOMceMCeIE=
 github.com/brad-jones/goasync/v2 v2.1.1 h1:0LuWfJWtgkqEdMLQVJmDMX78fx2o0BcecrQTpr+P2F4=
 github.com/brad-jones/goasync/v2 v2.1.1/go.mod h1:Q6AiIqVl/tTEMcVBQFQx3w2W4pu9zIIkgrYTWvzhU1Q=
-github.com/brad-jones/goerr/v2 v2.1.0 h1:qAjgZbBAR311Rnecw7zNhXkgtG9Ww9bT9tDoDxzCLss=
-github.com/brad-jones/goerr/v2 v2.1.0/go.mod h1:Tj0XvHoA0mA1ydoXzedjw7tNVcTWRAgTLG5t18UM4cE=
+github.com/brad-jones/goerr/v2 v2.1.1 h1:X+0lMbQmRktHDH411d2eAG6p19g6KyGnSrZCoOLJTEI=
 github.com/brad-jones/goerr/v2 v2.1.1/go.mod h1:Tj0XvHoA0mA1ydoXzedjw7tNVcTWRAgTLG5t18UM4cE=
-github.com/brad-jones/goprefix v1.0.0 h1:6VnkxCBpSo6mwlfHFOICYzSnGeoCGTAEBZ8ILuTKF48=
-github.com/brad-jones/goprefix/v2 v2.0.0 h1:921+uzXVM7aTzhwWlD/haWrSPxYIetLOanEovF86qlE=
-github.com/brad-jones/goprefix/v2 v2.0.0/go.mod h1:OdUE/hchMpCN+bQN2KShrIyewBnf9rMnBiRerEemdUY=
 github.com/brad-jones/goprefix/v2 v2.0.1 h1:Uw21ZBPZi2GMs0HSRR6QTPtm8o07MXmCURLDOTGeW6U=
 github.com/brad-jones/goprefix/v2 v2.0.1/go.mod h1:bTkp3UY4ZUR+hibkIbSlV/Xyu/HES0C3SkPi56dqM2Y=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -27,6 +21,8 @@ github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 github.com/stretchr/testify v1.6.1 h1:hDPOHmpOpP40lSULcqw7IrRb/u7w6RpDC9399XyoNd0=
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
+github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=
+github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/wesovilabs/koazee v0.0.5 h1:p2AunsyLYFbPoh2jhSOaYq7DuCYD10vDe2dsJM0RTq8=
 github.com/wesovilabs/koazee v0.0.5/go.mod h1:pYhJpCWJQGXU5aVVD+LxutvCKLDSK8I7g5htWvaZlvw=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
