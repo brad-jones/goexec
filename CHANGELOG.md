@@ -1,3 +1,10 @@
+## [2.1.5](https://github.com/brad-jones/goexec/compare/v2.1.4...v2.1.5) (2021-03-11)
+
+
+### Bug Fixes
+
+* bumped node & go versions ([499f14b](https://github.com/brad-jones/goexec/commit/499f14bd496dd8531803de39857e54eafc5e324e))
+
 ## [2.1.4](https://github.com/brad-jones/goexec/compare/v2.1.3...v2.1.4) (2021-03-11)
 
 
