@@ -1,3 +1,10 @@
+## [2.1.6](https://github.com/brad-jones/goexec/compare/v2.1.5...v2.1.6) (2021-03-14)
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/brad-jones/goprefix/v2 from 2.0.1 to 2.0.5 ([#52](https://github.com/brad-jones/goexec/issues/52)) ([b12f609](https://github.com/brad-jones/goexec/commit/b12f6092100baf32150164d942b8a2ee49d102f5))
+
 ## [2.1.5](https://github.com/brad-jones/goexec/compare/v2.1.4...v2.1.5) (2021-03-11)
 
 
