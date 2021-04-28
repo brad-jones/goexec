@@ -30,14 +30,14 @@ func prefixed(prefix string,
 	// Prefix all StdOut
 	go func() {
 		if err := p.ReadFrom(stdOutPipeR).WriteTo(stdOut); err != nil {
-			errorCh <- fmt.Errorf("prefxing standard out: %s", err)
+			errorCh <- fmt.Errorf("prefixing standard out: %s", err)
 		}
 	}()
 
 	// Prefix all StdErr
 	go func() {
 		if err := p.ReadFrom(stdErrPipeR).WriteTo(stdErr); err != nil {
-			errorCh <- fmt.Errorf("prefxing standard out: %s", err)
+			errorCh <- fmt.Errorf("prefixing standard out: %s", err)
 		}
 	}()
 
