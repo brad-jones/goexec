@@ -180,7 +180,6 @@ func RunBufferedCmd(cmd *exec.Cmd) (out *StdBytes, err error) {
 	cmd.Stderr = stdErrPipeW
 
 	return buffered(
-		os.Stdout, os.Stderr,
 		stdOutPipeR, stdErrPipeR,
 		stdOutPipeW, stdErrPipeW, func() error {
 			return cmd.Run()
@@ -296,7 +295,6 @@ func PipeBuffered(cmds ...*exec.Cmd) (out *StdBytes, err error) {
 	cmds[len(cmds)-1].Stdout = stdOutPipeW
 
 	return buffered(
-		os.Stdout, os.Stderr,
 		stdOutPipeR, stdErrPipeR,
 		stdOutPipeW, stdErrPipeW, func() error {
 			return Pipe(cmds...)

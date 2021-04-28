@@ -49,8 +49,7 @@ func prefixed(prefix string,
 	return nil
 }
 
-func buffered(fstdOut, stdErr io.Writer,
-	stdOutPipeR, stdErrPipeR io.Reader,
+func buffered(stdOutPipeR, stdErrPipeR io.Reader,
 	stdOutPipeW, stdErrPipeW io.WriteCloser,
 	fn func() error) (out *StdBytes, err error) {
 
