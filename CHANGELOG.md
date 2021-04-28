@@ -1,3 +1,11 @@
+## [2.1.7](https://github.com/brad-jones/goexec/compare/v2.1.6...v2.1.7) (2021-04-28)
+
+
+### Bug Fixes
+
+* removed some unused function parameters ([e461ac8](https://github.com/brad-jones/goexec/commit/e461ac8bf7a9d870875424a5b750356bbdc503ed))
+* spelling mistake in error ([3f7e8a9](https://github.com/brad-jones/goexec/commit/3f7e8a91f8402b48c1ecc33b33f73cd6694e1177))
+
 ## [2.1.6](https://github.com/brad-jones/goexec/compare/v2.1.5...v2.1.6) (2021-03-14)
 
 
